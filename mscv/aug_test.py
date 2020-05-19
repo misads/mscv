@@ -34,14 +34,15 @@ class OverlapTTA(object):
     """
     def __init__(self, img, nw, nh, patch_w=256, patch_h=256, padding_w=0, padding_h=0, transforms=None):
 
-        self.img = torch.zeros((self.C, self.H + padding_h * 2, self.W + padding_w * 2)).cpu()
-        self.img[:, padding_h: padding_h + self.H, padding_w: padding_w + self.W] = img.cpu()
-
         self.nw = nw
         self.nh = nh
         self.patch_w = patch_w
         self.patch_h = patch_h
         self.N, self.C, self.H, self.W = img.shape
+
+        self.img = torch.zeros((1, self.C, self.H + padding_h * 2, self.W + padding_w * 2)).cpu()
+        self.img[:, :, padding_h: padding_h + self.H, padding_w: padding_w + self.W] = img.cpu()
+
         self.transforms = transforms
 
         self.device = img.device
