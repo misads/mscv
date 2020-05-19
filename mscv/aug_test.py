@@ -52,7 +52,7 @@ class OverlapTTA(object):
         self.padding_w = padding_w
         self.padding_h = padding_h
 
-        self.overlap_times = torch.zeros((self.C, self.H, self.W)).cpu()
+        self.overlap_times = torch.zeros((self.C, self.H + padding_h * 2, self.W + padding_w * 2)).cpu()
         self.slice_h = []
         self.slice_w = []
 
@@ -62,18 +62,15 @@ class OverlapTTA(object):
         #####################################
         for i in range(nh - 1):
             self.slice_h.append([i * stride_h + padding_h, i * stride_h + patch_h + padding_h])
-        self.slice_h.append([self.H - patch_h, self.H])
+        self.slice_h.append([self.H - patch_h + padding_h, self.H + padding_h])
         for i in range(nw - 1):
             self.slice_w.append([i * stride_w + padding_w, i * stride_w + patch_w + padding_w])
-        self.slice_w.append([self.W - patch_w, self.W])
+        self.slice_w.append([self.W - patch_w + padding_w, self.W + padding_w])
 
         #####################################
         #             保存结果的数组
         #####################################
-        if self.padding_w != 0 or self.padding_h != 0:
-            self.result = torch.zeros((self.C, self.H + padding_h * 2, self.W + padding_w * 2)).cpu()
-        else:
-            self.result = torch.zeros((self.C, self.H, self.W)).cpu()
+        self.result = torch.zeros((self.C, self.H + padding_h * 2, self.W + padding_w * 2)).cpu()
 
     def collect(self, x, cur):
         x = x.detach().cpu()
@@ -84,6 +81,7 @@ class OverlapTTA(object):
         #####################################
         #         分别记录图像和重复次数
         #####################################
+        x = x[:, self.padding_h:self.padding_h + self.patch_h, self.padding_w:self.padding_w + self.patch_w]
 
         self.result[:, self.slice_h[i][0]:self.slice_h[i][1], self.slice_w[j][0]:self.slice_w[j][1]] += x
         self.overlap_times[:, self.slice_h[i][0]:self.slice_h[i][1], self.slice_w[j][0]:self.slice_w[j][1]] += 1
