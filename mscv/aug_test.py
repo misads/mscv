@@ -61,10 +61,10 @@ class OverlapTTA(object):
         # 将位置信息先保存在slice_h和slice_w数组中
         #####################################
         for i in range(nh - 1):
-            self.slice_h.append([i * stride_h, i * stride_h + patch_h])
+            self.slice_h.append([i * stride_h + padding_h, i * stride_h + patch_h + padding_h])
         self.slice_h.append([self.H - patch_h, self.H])
         for i in range(nw - 1):
-            self.slice_w.append([i * stride_w, i * stride_w + patch_w])
+            self.slice_w.append([i * stride_w + padding_w, i * stride_w + patch_w + padding_w])
         self.slice_w.append([self.W - patch_w, self.W])
 
         #####################################

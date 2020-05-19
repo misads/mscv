@@ -17,7 +17,7 @@ setup(
     description='mscv - A foundational python library for computer vision research.',
     long_description=long_description,
     long_description_content_type="text/markdown",
-    # url='https://github.com/misads/mscv',
+    url='https://github.com/misads/mscv',
     author='Haoyu Xu',
     author_email='xuhaoyu@tju.edu.cn',
     license='MIT',
