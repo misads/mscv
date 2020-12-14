@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def tensor2im(x):
+def tensor2im(x, index=0):
     """Convert tensor to image.
 
     Args:
@@ -11,7 +11,7 @@ def tensor2im(x):
         an image in shape of [h, w, c].
 
     """
-    x = x.data.cpu().numpy()[0]
+    x = x.data.cpu().numpy()[index]
     x[x > 1] = 1
     x[x < 0] = 0
     x *= 255
